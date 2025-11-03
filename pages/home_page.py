@@ -1,5 +1,5 @@
-from .base_page import BasePage
-from .locators import HomePageLocators
+from base_page import BasePage
+from locators import HomePageLocators
 
 class HomePage(BasePage):
     def should_be_home_page(self):

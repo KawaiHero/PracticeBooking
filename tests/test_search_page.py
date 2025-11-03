@@ -1,27 +1,34 @@
+from pages.locators import SearchLocators
 from pages.search import SearchPage
-import time
+import pytest
+
+BASE = "https://www.booking.com/"
 
 def test_user_can_use_search_box(browser):
-    link = 'https://www.booking.com'
-    page = SearchPage(browser, link)
-    page.open()
-    time.sleep(1)
-    #page.alert_accept()
-    page.should_be_exact_search_direction()
-    page.should_be_search_result()
-    page.should_be_exact_parametrs_in_URL()
+    page = SearchPage(browser, BASE)
+    page.open_and_accept()
+    page.close_entry_window()
+    page.search_city_with_dates("Warsaw", nights=3)
+    page.wait_results_loaded(min_cards=1)
+    assert page.url_has_dates_and_adults()
+    assert page.cards_count() > 0
 
-def test_user_can_not_use_empty_search_box(browser):
-    link = 'https://www.booking.com'
-    page = SearchPage(browser, link)
-    page.open()
-    time.sleep(1)
-    page.search_should_not_be_work_with_empty_data()
+def test_user_cannot_use_empty_search(browser):
+    page = SearchPage(browser, BASE)
+    page.open_and_accept()
+    page.close_entry_window()
+    page.submit()
+    assert page.is_element_present(*SearchLocators.SEARCH_BOX_ALERT) or not page.url_has_dates_and_adults()
 
-def test_user_can_see_results(browser):
-    link = 'https://www.booking.com'
-    page = SearchPage(browser, link)
-    page.open()
-    time.sleep(1)
-    page.should_be_exact_search_direction()
-    page.should_be_actual_results()
+@pytest.mark.parametrize("city", ["Warsaw", "Kraków", "Gdańsk"])
+def test_results_have_basic_elements(browser, city):
+    page = SearchPage(browser, BASE)
+    page.open_and_accept()
+    page.close_entry_window()
+    page.search_city_with_dates(city, nights=2)
+    page.wait_results_loaded(min_cards=1)
+    assert page.safe_get_text(SearchLocators.RESULT_TITLE) != ""
+    raw = page.safe_get_text(SearchLocators.RESULT_PRICE)
+    price = int(''.join(ch for ch in raw if ch.isdigit()))
+    assert price > 0
+    assert page.is_element_present(*SearchLocators.RESULT_AVAILABILITY)
