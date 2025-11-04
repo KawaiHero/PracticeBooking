@@ -2,7 +2,6 @@ from selenium.webdriver.common.by import By
 
 class BasePageLocators:
     COOKIES_ACCEPT = (By.CSS_SELECTOR, 'button[aria-label="Accept"], #onetrust-accept-btn-handler, button:has([data-cookie-banner="accept"])')
-    ALERT_ENTRY_ACCEPT = (By.CSS_SELECTOR, '[role="dialog"]')
 
 class HomePageLocators:
     MAIN_LOGO = (By.CSS_SELECTOR, '[data-testid="header-booking-logo"]')
@@ -19,3 +18,5 @@ class SearchLocators:
     RESULT_PRICE = (By.CSS_SELECTOR, '[data-testid="price-and-discounted-price"], [data-testid="price"]')
     RESULT_AVAILABILITY = (By.CSS_SELECTOR, '[data-testid="availability-cta"]')
     SEARCH_BOX_ALERT = (By.CSS_SELECTOR, '[data-testid="searchbox-alert"]')
+    RESULT_PAGE_TITLE = (By.CSS_SELECTOR, '[data-testid="PropertyHeaderDesktop-wrapper"] h2')
+    RESULT_PAGE_ROOMS_TABLE = (By.CSS_SELECTOR, '[id="rooms_table"]')

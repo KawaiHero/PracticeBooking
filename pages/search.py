@@ -48,27 +48,17 @@ class SearchPage(BasePage):
         qs = parse_qs(urlparse(self.browser.current_url).query)
         return all(k in qs for k in ("checkin", "checkout", "group_adults"))
 
-    def should_be_exact_parametrs_in_URL(self):
-        assert 'checkin' and 'group_adults' and 'checkout' in self.browser.current_url,\
-            "There is wrong data in URL!"
-
-    def search_should_not_be_work_with_empty_data(self):
-        direction = self.browser.find_element(*SearchLocators.SEARCH_PLACE)
-        direction.send_keys(' ')
-        self.browser.find_element(*SearchLocators.SEARCH_BUTTON).click()
-        assert self.is_element_present(*SearchLocators.SEARCH_BOX_ALERT), \
-            'The alert does not appear'
-
-    def should_be_actual_results(self):
-        assert self.is_element_present(*SearchLocators.RESULT_TITLE) \
-               and self.is_element_present(*SearchLocators.RESULT_PRICE)\
-               and self.is_element_present(*SearchLocators.RESULT_AVAILABILITY), \
-            'The search result is not expected'
-
-    def wait_results_loaded(self, min_cards: int = 1, timeout: int = 20):
-            WebDriverWait(self.browser, timeout).until(
-                lambda d: len(d.find_elements(*SearchLocators.RESULT_CARD)) >= min_cards
-            )
 
     def cards_count(self) -> int:
             return len(self.browser.find_elements(*SearchLocators.RESULT_CARD))
+
+    def open_result_and_check(self):
+        result_title = self.wait_visible(SearchLocators.RESULT_TITLE).text.strip()
+        self.click(SearchLocators.RESULT_TITLE)
+        if len(self.browser.window_handles) > 1:
+            self.browser.switch_to.window(self.browser.window_handles[-1])
+
+        result_page_title = self.browser.find_element(*SearchLocators.RESULT_PAGE_TITLE).text.strip()
+        assert result_title == result_page_title
+        assert self.browser.find_element(*SearchLocators.RESULT_PAGE_ROOMS_TABLE).is_displayed(), \
+            "Rooms table is not visible"

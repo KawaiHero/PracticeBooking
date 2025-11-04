@@ -7,7 +7,6 @@ BASE = "https://www.booking.com/"
 def test_user_can_use_search_box(browser):
     page = SearchPage(browser, BASE)
     page.open_and_accept()
-    page.close_entry_window()
     page.search_city_with_dates("Warsaw", nights=3)
     page.wait_results_loaded(min_cards=1)
     assert page.url_has_dates_and_adults()
@@ -32,3 +31,12 @@ def test_results_have_basic_elements(browser, city):
     price = int(''.join(ch for ch in raw if ch.isdigit()))
     assert price > 0
     assert page.is_element_present(*SearchLocators.RESULT_AVAILABILITY)
+
+
+def test_opened_results_have_basic_elements(browser):
+    city = 'Warsaw'
+    page = SearchPage(browser, BASE)
+    page.open_and_accept()
+    page.close_entry_window()
+    page.search_city_with_dates(city, nights=2)
+    page.open_result_and_check()
