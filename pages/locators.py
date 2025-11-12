@@ -12,11 +12,11 @@ class SearchLocators:
     DATA_FIELD = (By.CSS_SELECTOR, '[data-testid="date-display-field-start"]')
     SEARCH_BUTTON = (By.CSS_SELECTOR, '[type="submit"]')
 
-    SEARCH_RESULT = (By.CSS_SELECTOR, '[data-testid="search-results"]')
+    SEARCH_RESULT = (By.CSS_SELECTOR, '[data-results-container="1"]')
     RESULT_CARD = (By.CSS_SELECTOR, '[data-testid="property-card"]')
     RESULT_TITLE = (By.CSS_SELECTOR, '[data-testid="title"]')
     RESULT_PRICE = (By.CSS_SELECTOR, '[data-testid="price-and-discounted-price"], [data-testid="price"]')
     RESULT_AVAILABILITY = (By.CSS_SELECTOR, '[data-testid="availability-cta"]')
     SEARCH_BOX_ALERT = (By.CSS_SELECTOR, '[data-testid="searchbox-alert"]')
-    RESULT_PAGE_TITLE = (By.CSS_SELECTOR, '[data-testid="PropertyHeaderDesktop-wrapper"] h2')
+    RESULT_PAGE_TITLE = (By.CSS_SELECTOR, '[id="hp_hotel_name"] h2')
     RESULT_PAGE_ROOMS_TABLE = (By.CSS_SELECTOR, '[id="rooms_table"]')

@@ -58,7 +58,11 @@ class SearchPage(BasePage):
         if len(self.browser.window_handles) > 1:
             self.browser.switch_to.window(self.browser.window_handles[-1])
 
-        result_page_title = self.browser.find_element(*SearchLocators.RESULT_PAGE_TITLE).text.strip()
+        result_page_title = self.wait_visible(SearchLocators.RESULT_PAGE_TITLE).text.strip()
         assert result_title == result_page_title
         assert self.browser.find_element(*SearchLocators.RESULT_PAGE_ROOMS_TABLE).is_displayed(), \
             "Rooms table is not visible"
+
+    def error_when_empty_searchbox(self):
+        self.search_city_with_dates(city=' ')
+        assert self.wait_visible(SearchLocators.SEARCH_EMPTY)
